@@ -1,4 +1,4 @@
-package testFramework;
+package UTester;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,7 +7,9 @@ import java.util.function.Function;
 import java.util.function.Predicate;
 import java.util.function.Supplier;
 
-import static testFramework.TerminalStyle.*;
+//          ┌─┐ ┌┬┐
+//          │ │ ├┼┤
+//          └─┘ └┴┘
 
 public class TestFramework {
     private static final int maxFailuresToPrint = 3;
@@ -19,8 +21,8 @@ public class TestFramework {
     public static <T> TestResult assertEquals(Supplier<T> actual, T expected, String input) {
         return assertHelper(
             actual, expected::equals,
-            x -> RED.format(
-                "expected %s, instead got " + "%s", CYAN.format(expected), CYAN.format(x)), input
+            x -> TerminalStyle.RED.format(
+                " └─ expected %s, instead got %s", TerminalStyle.CYAN.format(expected), TerminalStyle.CYAN.format(x)), input
         );
     }
 
@@ -81,6 +83,18 @@ public class TestFramework {
         TestFramework.runTest(test, testName, 1);
     }
 
+    public static String formatTime(double time) {
+        if (time < 0.000001) {
+            return (time * 1_000_000) + "ns";
+        }
+        else if (time < 0.001) {
+            return (time * 1_000) + "ms";
+        }
+        else {
+            return time + "s";
+        }
+    }
+
     public static void runTest(Test test, String testName, int numRuns) {
         List<TestResult.Failure> failures = new ArrayList<>();
 
@@ -97,22 +111,22 @@ public class TestFramework {
         long endTimeNanos = System.nanoTime();
         double totalRuntimeSeconds = (endTimeNanos - startTimeNanos) / 1_000_000_000.0;
 
-        String runTimeInfo = MAGENTA.format("%.3fs", totalRuntimeSeconds);
+        String runTimeInfo = TerminalStyle.MAGENTA.format(formatTime(totalRuntimeSeconds));
 
         if (numRuns > 1) {
             runTimeInfo += String.format(
-                " (%s per run * %s runs)", MAGENTA.format("%.3fs", totalRuntimeSeconds / numRuns),
-                MAGENTA.format("%d", numRuns)
+                " (%s per run * %s runs)", TerminalStyle.MAGENTA.format("%.3fs", totalRuntimeSeconds / numRuns),
+                TerminalStyle.MAGENTA.format("%d", numRuns)
             );
         }
 
         if (failures.isEmpty()) {
-            System.out.printf("%s %s in %s%n", GREEN.format("Passed test"), testName, runTimeInfo);
+            System.out.printf("%s %s in %s%n", TerminalStyle.GREEN.format("Passed test"), testName, runTimeInfo);
         }
         else {
             System.out.printf(
                 "%s %s in %s:%n",
-                numRuns == 1 ? RED.format("Failed test") : RED.format(
+                numRuns == 1 ? TerminalStyle.RED.format("Failed test") : TerminalStyle.RED.format(
                     "Failed %d/%d runs for test",
                     failures.size(), numRuns
                 ), testName, runTimeInfo
@@ -124,15 +138,15 @@ public class TestFramework {
                 String input = testResult.input();
 
                 System.out.printf(
-                    "    %s%s%n",
-                    input == null ? "" : RED.format("With input %s: ", CYAN.format(input)),
-                    RED.format(testResult.message())
+                    "%s%s%n",
+                    input == null ? "" : TerminalStyle.RED.format("With input %s: ", TerminalStyle.CYAN.format(input)),
+                    TerminalStyle.RED.format(testResult.message())
                 );
 
                 numFailuresPrinted++;
 
                 if (numFailuresPrinted == maxFailuresToPrint) {
-                    System.out.println(RED.format("    etc."));
+                    System.out.println(TerminalStyle.RED.format("    etc."));
                     break;
                 }
             }

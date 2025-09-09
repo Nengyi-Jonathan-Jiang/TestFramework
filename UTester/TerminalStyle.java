@@ -1,4 +1,4 @@
-package testFramework;
+package UTester;
 
 public enum TerminalStyle {
     RED(31),

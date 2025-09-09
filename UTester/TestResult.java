@@ -1,4 +1,4 @@
-package testFramework;
+package UTester;
 
 public abstract class TestResult {
     // Private constructor ensures that only the static inner classes may extend this class
