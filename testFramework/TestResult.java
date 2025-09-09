@@ -2,6 +2,8 @@ package testFramework;
 
 public abstract class TestResult {
     // Private constructor ensures that only the static inner classes may extend this class
+    // The goal is to emulate a sum type, where a TestResult may be a Success (empty class) or a
+    // Failure (which has a few instance variables).
     private TestResult() {}
 
     public abstract boolean didPass();
