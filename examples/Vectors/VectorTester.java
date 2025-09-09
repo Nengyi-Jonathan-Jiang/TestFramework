@@ -1,9 +1,6 @@
-package example;
+package examples.Vectors;
 
-import testFramework.TestCaseBuilder;
-import testFramework.TestFramework;
-import testFramework.TestResult;
-
+import UTester.*;
 import java.util.Arrays;
 
 public class VectorTester {

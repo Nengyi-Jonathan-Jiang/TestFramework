@@ -1,4 +1,4 @@
-package example;
+package examples.Vectors;
 
 import java.util.Arrays;
 import java.util.function.IntToDoubleFunction;
@@ -8,6 +8,7 @@ public class Vector {
 
     public Vector(double... values) {
         this.values = Arrays.copyOf(values, values.length);
+        System.out.println("THIS IS INTERNAL PRINTING FOR OTHER PURPOSES!!");
         values[0] = 0; // Break a test case on purpose to demonstrate code that fails
     }
 

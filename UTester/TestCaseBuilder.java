@@ -1,9 +1,9 @@
-package testFramework;
+package UTester;
 
 import java.util.function.*;
 
-import static testFramework.TerminalStyle.CYAN;
-import static testFramework.TerminalStyle.RED;
+import static UTester.TerminalStyle.CYAN;
+import static UTester.TerminalStyle.RED;
 
 public class TestCaseBuilder<R> {
     private final Supplier<R> supplier;

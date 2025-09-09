@@ -1,12 +1,13 @@
-package testFramework;
+package UTester;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static testFramework.TerminalStyle.*;
+import static UTester.TerminalStyle.*;
 
 public class TestFramework {
     private static final int maxFailuresToPrint = 3;
+    private static final int indentation = 1;
 
     public static void runTest(String testName, Test test) {
         TestFramework.runTest(testName, 1, test);
@@ -51,22 +52,28 @@ public class TestFramework {
 
             // Only print up to a max threshold of errors
             int numFailuresPrinted = 0;
-            for (TestResult.Failure testResult : failures) {
+            for (int i = 0; i < failures.size(); i++) {
+                TestResult.Failure testResult = failures.get(i);
                 String input = testResult.input();
 
-                System.out.printf(
-                    "    %s%s%n",
+                System.out.printf(RED.format(
+                    "%s %s%s%n",
+                    (i == failures.size() - 1 ? "└" : "├") + "─".repeat(indentation),
                     input == null ? "" : RED.format("With input %s: ", CYAN.format(input)),
-                    RED.format(testResult.message())
-                );
+                    testResult.message()
+                ));
 
                 numFailuresPrinted++;
 
                 if (numFailuresPrinted == maxFailuresToPrint) {
-                    System.out.println(RED.format("    etc."));
+                    System.out.println(RED.format("└%s %s", "─".repeat(indentation), (failures.size() - maxFailuresToPrint) + " more failures..."));
                     break;
                 }
             }
         }
     }
 }
+
+// ┌─┐ ┌┬┐
+// │ │ ├┼┤
+// └─┘ └┴┘
